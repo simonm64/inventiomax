@@ -219,9 +219,16 @@ $product = ProductData::getById($p["product_id"]);
 <div class="col-md-3">
     <label class="control-label">Almacen</label>
     <div class="col-lg-12">
-    <h4 class=""><?php 
-    echo StockData::getPrincipal()->name;
-    ?></h4>
+    <?php
+    $stocks = StockData::getAll();
+    $mainStockId = StockData::getPrincipal()->id;
+    ?>
+    <select name="stock_id" id="stock_id" class="form-control">
+        <option value="0">-- NINGUNO --</option>
+        <?php foreach($stocks as $stock):?>
+            <option <?php echo $mainStockId == $stock->id ? 'selected="selected"' : ''; ?> value="<?php echo $stock->id;?>"><?php echo $stock->name; ?></option>
+        <?php endforeach;?>
+    </select>
     </div>
   </div>
 
@@ -336,7 +343,7 @@ $clients = DData::getAll();
     if(money!=""){
     if(p!=4){
 		if(money<(<?php echo $total;?>-discount)){
-			alert("Efectivo insificiente!");
+			alert("Efectivo insuficiente!");
 			e.preventDefault();
 		}else{
 			if(discount==""){ discount=0;}

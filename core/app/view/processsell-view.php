@@ -9,17 +9,26 @@ if(isset($_SESSION["cart"])){
 		$num_succ = 0;
 		$process=false;
 		$errors = array();
+        //Se va a validar que el Stock que se esta enviando sea numerico
+        if(!is_numeric($_POST["stock_id"]) || !isset($_POST["stock_id"])){
+            $stockId = 0;
+        }
+        else{
+            $stockId = (int)$_POST["stock_id"];
+        }
+
+
 		foreach($cart as $c){
 
 			///
-			$q = OperationData::getQByStock($c["product_id"],StockData::getPrincipal()->id);
+            $q = OperationData::getQByStock($c["product_id"], $stockId);
 			if($c["q"]<=$q){
 				if(isset($_POST["is_oficial"])){
-				$qyf =OperationData::getQByStock($c["product_id"],StockData::getPrincipal()->id); /// son los productos que puedo facturar
+                $qyf =OperationData::getQByStock($c["product_id"], $stockId); /// son los productos que puedo facturar
 				if($c["q"]<=$qyf){
 					$num_succ++;
 				}else{
-				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto para facturar en inventario.");					
+				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto para facturar en inventario seleccionado");
 				$errors[count($errors)] = $error;
 				}
 				}else{
@@ -27,7 +36,7 @@ if(isset($_SESSION["cart"])){
 					$num_succ++;
 				}
 			}else{
-				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
+				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario seleccionado");
 				$errors[count($errors)] = $error;
 			}
 
@@ -61,7 +70,7 @@ $_SESSION["errors"] = $errors;
 			$sell->iva=  $iva_val;
 			$sell->total = $_POST["total"];
 			$sell->discount = $_POST["discount"];
-			$sell->stock_to_id = StockData::getPrincipal()->id;
+            $sell->stock_to_id = $stockId;
 			$sell->person_id=$_POST["client_id"]!=""?$_POST["client_id"]:"NULL";
 
 			$s = $sell->add();
@@ -92,7 +101,7 @@ $_SESSION["errors"] = $errors;
 			$op->product_id = $c["product_id"] ;
 
 			$op->operation_type_id=OperationTypeData::getByName($operation_type)->id;
-			$op->stock_id = StockData::getPrincipal()->id;
+            $op->stock_id = $stockId;
 			$op->sell_id=$s[1];
 			$op->q= $c["q"];
 			if(isset($_POST["is_oficial"])){
@@ -164,7 +173,7 @@ if($_POST["client_id"]!=""){
 
 
 
-$qx = OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
+$qx = OperationData::getQByStock($product->id, $stockId);
 $subject="";
 $message="";
 $last = true;
