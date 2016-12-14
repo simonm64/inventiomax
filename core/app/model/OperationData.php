@@ -180,6 +180,26 @@ public static function getPPByDateOfficial($start,$end){
 		return Model::many($query[0],new OperationData());
 	}
 
+    public static function getProductsDetailBySellId($sell_id){
+        $sql = "SELECT
+                  o.product_id,
+                  p.name,
+                  p.inventary_min,
+                  o.q,
+                  o.price_out,
+                  rd.name rd,
+                  p.partida_lote
+                FROM
+                  operation o
+                JOIN product p ON
+                  o.product_id = p.id
+                JOIN rd ON
+                  rd.id = p.rd_id
+                WHERE o.sell_id = {$sell_id}";
+        $query = Executor::doit($sql);
+        return Model::many($query[0],new OperationData());
+    }
+
 
 	public static function getAllByProductIdCutIdYesF($product_id,$cut_id){
 		$sql = "select * from ".self::$tablename." where product_id=$product_id and cut_id=$cut_id order by created_at desc";

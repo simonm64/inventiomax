@@ -166,11 +166,13 @@ $(document).ready(function(){
 	<th>Mensaje</th>
 </tr>
 <?php foreach ($_SESSION["errors"]  as $error):
-$product = ProductData::getById($error["product_id"]);
+$product = ProductData::getByIdtoSell($error["product_id"]);
 ?>
 <tr class="danger">
 	<td><?php echo $product->id; ?></td>
-	<td><?php echo $product->name; ?></td>
+	<td><?php echo $product->rd; ?></td>
+    <td><?php echo $product->partida_lote; ?></td>
+    <td><?php echo $product->name; ?></td>
 	<td><b><?php echo $error["message"]; ?></b></td>
 </tr>
 
@@ -192,18 +194,22 @@ $total = 0;
 	<th style="width:30px;">Codigo</th>
 	<th style="width:30px;">Cantidad</th>
 	<th style="width:30px;">Unidad</th>
-	<th>Producto</th>
+    <th style="width:30px;">RD</th>
+    <th style="width:30px;">Lote</th>
+	<th style="width:30px;">Producto</th>
 	<th style="width:30px;">Precio Unitario</th>
 	<th style="width:30px;">Precio Total</th>
 	<th ></th>
 </thead>
 <?php foreach($_SESSION["cart"] as $p):
-$product = ProductData::getById($p["product_id"]);
+$product = ProductData::getByIdtoSell($p["product_id"]);
 ?>
 <tr >
 	<td><?php echo $product->id; ?></td>
 	<td ><?php echo $p["q"]; ?></td>
 	<td><?php echo $product->unit; ?></td>
+    <td><?php echo $product->rd; ?></td>
+    <td><?php echo $product->lote   ; ?></td>
 	<td><?php echo $product->name; ?></td>
 	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
 	<td><b>$ <?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>

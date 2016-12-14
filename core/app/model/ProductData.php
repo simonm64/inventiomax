@@ -68,6 +68,22 @@ class ProductData {
 
 	}
 
+    public static function getByIdToSell($id){
+        $sql = "select
+                  p.id,
+                  p.unit,
+                  rd.name rd,
+                  p.partida_lote lote,
+                  p.name,
+                  p.price_out
+                FROM
+                  product p LEFT JOIN rd
+                  ON p.rd_id = rd.id
+                  where p.id={$id}";
+		$query = Executor::doit($sql);
+		return Model::one($query[0],new ProductData());
+
+	}
 
 
 	public static function getAll(){

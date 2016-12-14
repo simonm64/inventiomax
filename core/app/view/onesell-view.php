@@ -12,22 +12,21 @@
 <?php if(isset($_GET["id"]) && $_GET["id"]!=""):?>
 <?php
 $sell = SellData::getById($_GET["id"]);
-$operations = OperationData::getAllProductsBySellId($_GET["id"]);
+$operations = OperationData::getProductsDetailBySellId($_GET["id"]);
 $total = 0;
 ?>
 <?php
 if(isset($_COOKIE["selled"])){
-  foreach ($operations as $operation) {
+  foreach ($operations as $op) {
 //    print_r($operation);
-    $qx = OperationData::getQByStock($operation->product_id,StockData::getPrincipal()->id);
+    $qx = OperationData::getQByStock($op->product_id,StockData::getPrincipal()->id);
     // print "qx=$qx";
-      $p = $operation->getProduct();
     if($qx==0){
-      echo "<p class='alert alert-danger'>El producto <b style='text-transform:uppercase;'> $p->name</b> no tiene existencias en inventario.</p>";      
-    }else if($qx<=$p->inventary_min/2){
-      echo "<p class='alert alert-danger'>El producto <b style='text-transform:uppercase;'> $p->name</b> tiene muy pocas existencias en inventario.</p>";
-    }else if($qx<=$p->inventary_min){
-      echo "<p class='alert alert-warning'>El producto <b style='text-transform:uppercase;'> $p->name</b> tiene pocas existencias en inventario.</p>";
+      echo "<p class='alert alert-danger'>El producto <b style='text-transform:uppercase;'> $op->name</b> no tiene existencias en inventario.</p>";
+    }else if($qx<=$op->inventary_min/2){
+      echo "<p class='alert alert-danger'>El producto <b style='text-transform:uppercase;'> $op->name</b> tiene muy pocas existencias en inventario.</p>";
+    }else if($qx<=$op->inventary_min){
+      echo "<p class='alert alert-warning'>El producto <b style='text-transform:uppercase;'> $op->name</b> tiene pocas existencias en inventario.</p>";
     }
   }
   setcookie("selled","",time()-18600);
@@ -61,21 +60,24 @@ $user = $sell->getUser();
   <thead>
     <th>Codigo</th>
     <th>Cantidad</th>
+    <th>RD</th>
+    <th>Lote</th>
     <th>Nombre del Producto</th>
     <th>Precio Unitario</th>
     <th>Total</th>
 
   </thead>
 <?php
-  foreach($operations as $operation){
-    $product  = $operation->getProduct();
+  foreach($operations as $op){
 ?>
 <tr>
-  <td><?php echo $product->id ;?></td>
-  <td><?php echo $operation->q ;?></td>
-  <td><?php echo $product->name ;?></td>
-  <td>$ <?php echo number_format($operation->price_out,2,".",",") ;?></td>
-  <td><b>$ <?php echo number_format($operation->q*$operation->price_out,2,".",",");$total+=$operation->q*$operation->price_out;?></b></td>
+  <td><?php echo $op->product_id ;?></td>
+  <td><?php echo $op->q ;?></td>
+    <td><?php echo $op->rd ;?></td>
+    <td><?php echo $op->partida_lote ;?></td>
+    <td><?php echo $op->name ;?></td>
+  <td>$ <?php echo number_format($op->price_out,2,".",",") ;?></td>
+  <td><b>$ <?php echo number_format($op->q*$op->price_out,2,".",",");$total+=$op->q*$op->price_out;?></b></td>
 </tr>
 <?php
   }
@@ -149,16 +151,15 @@ var columns2 = [
 ];
 
 var rows = [
-  <?php foreach($operations as $operation):
-  $product  = $operation->getProduct();
+  <?php foreach($operations as $op):
   ?>
 
     {
-      "code": "<?php echo $product->id; ?>",
-      "q": "<?php echo $operation->q; ?>",
-      "product": "<?php echo $product->name; ?>",
-      "pu": "$ <?php echo number_format($operation->price_out,2,".",","); ?>",
-      "total": "$ <?php echo number_format($operation->q*$operation->price_out,2,".",","); ?>",
+      "code": "<?php echo $op->product_id; ?>",
+      "q": "<?php echo $op->q; ?>",
+      "product": "<?php echo $op->name; ?>",
+      "pu": "$ <?php echo number_format($op->price_out,2,".",","); ?>",
+      "total": "$ <?php echo number_format($op->q*$op->price_out,2,".",","); ?>",
       },
  <?php endforeach; ?>
 ];
