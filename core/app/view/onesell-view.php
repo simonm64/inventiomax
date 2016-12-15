@@ -135,7 +135,9 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
 var columns = [
 //    {title: "Reten", dataKey: "reten"},
     {title: "Codigo", dataKey: "code"}, 
-    {title: "Cantidad", dataKey: "q"}, 
+    {title: "Cantidad", dataKey: "q"},
+    {title: "RD", dataKey: "rd"},
+    {title: "Lote", dataKey: "partida_lote"},
     {title: "Nombre del Producto", dataKey: "product"}, 
     {title: "Precio unitario", dataKey: "pu"}, 
     {title: "Total", dataKey: "total"}, 
@@ -157,6 +159,8 @@ var rows = [
     {
       "code": "<?php echo $op->product_id; ?>",
       "q": "<?php echo $op->q; ?>",
+      "rd": "<?php echo $op->rd; ?>",
+      "partida_lote": "<?php echo $op->partida_lote; ?>",
       "product": "<?php echo $op->name; ?>",
       "pu": "$ <?php echo number_format($op->price_out,2,".",","); ?>",
       "total": "$ <?php echo number_format($op->q*$op->price_out,2,".",","); ?>",
