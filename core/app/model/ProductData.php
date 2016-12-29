@@ -92,6 +92,22 @@ class ProductData {
 		return Model::many($query[0],new ProductData());
 	}
 
+    public static function getAllInv(){
+        #$sql = "select * from ".self::$tablename;
+        $sql = "select
+                p.id,
+                p.name,
+                rd.name rd,
+                p.barcode
+            from
+              product p
+            join rd on (
+              p.rd_id = rd.id
+              );";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
+
 	public static function getAllByCategoryId($id){
 		$sql = "select * from ".self::$tablename." where category_id=$id";
 		$query = Executor::doit($sql);
@@ -106,12 +122,27 @@ class ProductData {
 
 
 	public static function getLike($p){
-		$sql = "select * from ".self::$tablename." where barcode like '%$p%' or name like '%$p%' or id like '%$p%'";
-		$query = Executor::doit($sql);
+        $sql = "select * from ".self::$tablename." where barcode like '%$p%' or name like '%$p%' or id like '%$p%'";
+        $query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
 
-
+    public static function getLikeToSell($p){
+        $sql = "select
+                    p.id,
+                    p.name,
+                    p.unit,
+                    rd.name rd,
+                    p.inventary_min,
+                    p.price_out
+                from
+                  ".self::$tablename." p
+                join rd on (
+                  p.rd_id = rd.id
+                  ) where p.barcode like '%$p%' or p.name like '%$p%' or p.id like '%$p%'";
+        $query = Executor::doit($sql);
+        return Model::many($query[0],new ProductData());
+    }
 
 	public static function getAllByUserId($user_id){
 		$sql = "select * from ".self::$tablename." where user_id=$user_id order by created_at desc";

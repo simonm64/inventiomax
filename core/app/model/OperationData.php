@@ -195,7 +195,7 @@ public static function getPPByDateOfficial($start,$end){
                   o.product_id = p.id
                 JOIN rd ON
                   rd.id = p.rd_id
-                WHERE o.sell_id = {$sell_id}";
+                WHERE o.operation_type_id = 2 AND o.sell_id = {$sell_id}";
         $query = Executor::doit($sql);
         return Model::many($query[0],new OperationData());
     }

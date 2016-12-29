@@ -9,11 +9,11 @@ include "../core/app/model/ProductData.php";
 
 require_once '../core/controller/PhpWord/Autoloader.php';
 use PhpOffice\PhpWord\Autoloader;
-use PhpOffice\PhpWord\Settings;
+//use PhpOffice\PhpWord\Settings;
 
 Autoloader::register();
 
-$word = new  PhpOffice\PhpWord\PhpWord();
+$word = new PhpOffice\PhpWord\PhpWord();
 
 $sell = SellData::getById($_GET["id"]);
 $operations = OperationData::getAllProductsBySellId($_GET["id"]);
@@ -69,15 +69,12 @@ $word->addTableStyle('table2', $styleTable,$styleFirstRow);
 
 
 /// datos bancarios
-
 $filename = "onesell-".time().".docx";
 #$word->setReadDataOnly(true);
-$word->save($filename,"Word2007");
+$saved = $word->save($filename,"Word2007",true);
 //chmod($filename,0444);
 header("Content-Disposition: attachment; filename='$filename'");
 readfile($filename); // or echo file_get_contents($filename);
 unlink($filename);  // remove temp file
-
-
 
 ?>

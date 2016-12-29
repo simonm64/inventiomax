@@ -24,7 +24,7 @@ $stock = StockData::getById($_GET["stock"]);
 
 
 <?php
-$products = ProductData::getAll();
+$products = ProductData::getAllInv();
 if(count($products)>0){
 	?>
 <div class="clearfix"></div>
@@ -38,6 +38,7 @@ if(count($products)>0){
 	<thead>
 		<th>Codigo</th>
 		<th>Nombre</th>
+        <th>RD</th>
 		<th>Por Recibir</th>
 		<th>Disponible</th>
 		<th>Por Entregar</th>
@@ -47,10 +48,12 @@ if(count($products)>0){
 	$r=OperationData::getRByStock($product->id,$_GET["stock"]);
 	$q=OperationData::getQByStock($product->id,$_GET["stock"]);
 	$d=OperationData::getDByStock($product->id,$_GET["stock"]);
+	//$aStock = OperationData::getStockProducts($_GET["stock"]);
 	?>
 	<tr class="<?php if($q<=$product->inventary_min/2){ echo "danger";}else if($q<=$product->inventary_min){ echo "warning";}?>">
 		<td><?php echo $product->id; ?></td>
 		<td><?php echo $product->name; ?></td>
+        <td><?php echo $product->rd; ?></td>
 		<td>
 			<?php echo $r; ?>
 		</td>

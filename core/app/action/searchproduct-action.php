@@ -10,7 +10,7 @@ $go = $_GET["go"];
 $search  ="";
 if($go=="code"){ $search=$_GET["product_code"]; }
 else if($go=="name"){ $search=$_GET["product_name"]; }
-$products = ProductData::getLike($search);
+$products = ProductData::getLikeToSell($search);
 if(count($products)>0){
 	?>
 <h3>Resultados de la Busqueda</h3>
@@ -20,6 +20,7 @@ if(count($products)>0){
 		<th>Codigo</th>
 		<th>Nombre</th>
 		<th>Unidad</th>
+        <th>RD</th>
 		<th>Precio unitario</th>
 		<th>En inventario</th>
 		<th>Cantidad</th>
@@ -36,6 +37,7 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		<td style="width:80px;"><?php echo $product->id; ?></td>
 		<td><?php echo $product->name; ?></td>
 		<td><?php echo $product->unit; ?></td>
+        <td><?php echo $product->rd; ?></td>
 		<td><b>$<?php echo $product->price_out; ?></b></td>
 		<td>
 			<?php echo $q; ?>

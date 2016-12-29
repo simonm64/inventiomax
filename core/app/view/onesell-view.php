@@ -134,38 +134,54 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
 
 var columns = [
 //    {title: "Reten", dataKey: "reten"},
-    {title: "Codigo", dataKey: "code"}, 
+    /*{title: "Codigo", dataKey: "code"},
     {title: "Cantidad", dataKey: "q"},
     {title: "RD", dataKey: "rd"},
     {title: "Lote", dataKey: "partida_lote"},
     {title: "Nombre del Producto", dataKey: "product"}, 
     {title: "Precio unitario", dataKey: "pu"}, 
-    {title: "Total", dataKey: "total"}, 
+    {title: "Total", dataKey: "total"}, */
+
+    {title: "R.D./C.D.", dataKey: "rd"},
+    {title: "PARTIDA/LOTE", dataKey: "partida_lote"},
+    {title: "ESTATUS", dataKey: "estatus"},
+    {title: "CLAVE", dataKey: "code"},
+    {title: "DESCRIPCION DE LA MERCANCIA", dataKey: "product"},
+    {title: "UNIDADES", dataKey: "q"},
+
+    //{title: "Total", dataKey: "total"},
 //    ...
 ];
 
 
 var columns2 = [
 //    {title: "Reten", dataKey: "reten"},
-    {title: "", dataKey: "clave"}, 
-    {title: "", dataKey: "valor"}, 
+    {title: "", dataKey: "clave"},
+    {title: "", dataKey: "valor"},
 //    ...
 ];
 
 var rows = [
-  <?php foreach($operations as $op):
+  <?php $total_q = 0; foreach($operations as $op):
   ?>
-
     {
-      "code": "<?php echo $op->product_id; ?>",
-      "q": "<?php echo $op->q; ?>",
-      "rd": "<?php echo $op->rd; ?>",
-      "partida_lote": "<?php echo $op->partida_lote; ?>",
-      "product": "<?php echo $op->name; ?>",
-      "pu": "$ <?php echo number_format($op->price_out,2,".",","); ?>",
-      "total": "$ <?php echo number_format($op->q*$op->price_out,2,".",","); ?>",
-      },
- <?php endforeach; ?>
+        "rd": "<?php echo $op->rd; ?>",
+        "partida_lote": "<?php echo $op->partida_lote; ?>",
+        "estatus": "<?php echo 'Fiscal' ?>",
+        "code": "<?php echo $op->product_id; ?>",
+        "product": "<?php echo $op->name; ?>",
+        "q": "<?php echo $op->q; $total_q += $op->q; ?>",
+    },
+ <?php endforeach;
+ ?>
+    {
+    "rd": "",
+    "partida_lote": "",
+    "estatus": "",
+    "code": "",
+    "product": "TOTAL (UNIDADES):",
+    "q": "<?php echo $total_q;  ?>",
+    }
 ];
 
 var rows2 = [
@@ -175,12 +191,12 @@ $person = $sell->getPerson();
 
     {
       "clave": "Cliente",
-      "valor": "<?php echo $person->name." ".$person->lastname; ?>",
+      "valor": "<?php echo ""; //$person->name." ".$person->lastname; ?>",
       },
       <?php endif; ?>
     {
       "clave": "Atendido por",
-      "valor": "<?php echo $user->name." ".$user->lastname; ?>",
+      "valor": "<?php echo ""; // $user->name." ".$user->lastname; ?>",
       },
 
 ];
@@ -212,6 +228,7 @@ var doc = new jsPDF('p', 'pt');
 //        doc.text("Header", 40, 30);
   //      doc.text("Header", 40, 30);
 
+//CLIENTE Y ATENDIDO POR
 doc.autoTable(columns2, rows2, {
     theme: 'grid',
     overflow:'linebreak',
@@ -228,6 +245,7 @@ doc.autoTable(columns2, rows2, {
 });
 
 
+//TABLA DE CONTENIDO DE LA VENTA
 doc.autoTable(columns, rows, {
     theme: 'grid',
     overflow:'linebreak',
@@ -243,6 +261,8 @@ doc.autoTable(columns, rows, {
     }
 });
 
+//CLIENTE Y ATENDIDO POR
+/*
 doc.autoTable(columns2, rows2, {
     theme: 'grid',
     overflow:'linebreak',
@@ -256,7 +276,7 @@ doc.autoTable(columns2, rows2, {
     afterPageContent: function(data) {
 //        doc.text("Header", 40, 30);
     }
-});
+});*/
 //doc.setFontsize
 //img = new Image();
 //img.src = "liberacion2.jpg";
