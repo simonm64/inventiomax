@@ -25,7 +25,7 @@ $iva_val = ConfigurationData::getByPreffix("imp-val")->val;
 
 <?php if(isset($_GET["product"])):?>
 	<?php
-$products = ProductData::getLike($_GET["product"]);
+$products = ProductData::getLikeToSell($_GET["product"]);
 if(count($products)>0){
 	?>
 <h3>Resultados de la Busqueda</h3>
@@ -33,6 +33,7 @@ if(count($products)>0){
 <table class="table table-bordered table-hover">
 	<thead>
 		<th>Codigo</th>
+        <th>RD</th>
 		<th>Nombre</th>
 		<th>Unidad</th>
 		<th>Precio unitario</th>
@@ -48,6 +49,7 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		<form method="post" action="index.php?view=addtore">
 	<tr class="<?php if($q<=$product->inventary_min){ echo "danger"; }?>">
 		<td style="width:80px;"><?php echo $product->id; ?></td>
+        <td><?php echo $product->rd; ?></td>
 		<td><?php echo $product->name; ?></td>
 		<td><?php echo $product->unit; ?></td>
 		<td><b>$<?php echo $product->price_in; ?></b></td>

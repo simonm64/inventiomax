@@ -131,7 +131,7 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
 
 <script type="text/javascript">
         function thePDF() {
-
+console.log("ddede");
 var columns = [
 //    {title: "Reten", dataKey: "reten"},
     /*{title: "Codigo", dataKey: "code"},
@@ -161,6 +161,7 @@ var columns2 = [
 //    ...
 ];
 
+
 var rows = [
   <?php $total_q = 0; foreach($operations as $op):
   ?>
@@ -189,10 +190,6 @@ var rows2 = [
 $person = $sell->getPerson();
 ?>
 
-    {
-      "clave": "Cliente",
-      "valor": "<?php echo ""; //$person->name." ".$person->lastname; ?>",
-      },
       <?php endif; ?>
     {
       "clave": "Atendido por",
@@ -221,29 +218,23 @@ var rows3 = [
 // Only pt supported (not mm or in)
 var doc = new jsPDF('p', 'pt');
         doc.setFontSize(26);
-        doc.text("NOTA DE VENTA", 40, 65);
+        //doc.text("NOTA DE VENTA", 40, 65)
+        doc.text("DIRONI COMERCIAL S.A de C.V.", 40, 65);
+        doc.setFontSize(12);
+        doc.text("CALLE CANADA #124 COL. LOS ALAMOS", 40, 80);
+        doc.text("SALTILLO COAH. MEXICO CP. 25210", 40, 95);
+        doc.text("TEL (844) 485.3300 / 485.1020", 40 ,110);
+        doc.text("RFC OCO 061009 P43", 40, 125);
+        doc.text("WWW.RAYOLAMN.COM", 40, 140);
         doc.setFontSize(14);
-        doc.text("Fecha: <?php echo $sell->created_at; ?>", 40, 80);
+        doc.text("<?php echo "Fecha: ".date('d/m/Y'); ?>", 420, 170);
+        doc.setFontSize(12);
+        doc.text("Por medio de la presente solicito le entreguen a: <?php echo (isset($person->name))? $person->name." ".$person->lastname : ""; ?>", 40, 190);
+        doc.text("la mercancía a continuación detallada", 40, 205);
+        //doc.text("Fecha: <?php //echo $sell->created_at; ?>", 40, 170);
 //        doc.text("Operador:", 40, 150);
 //        doc.text("Header", 40, 30);
   //      doc.text("Header", 40, 30);
-
-//CLIENTE Y ATENDIDO POR
-doc.autoTable(columns2, rows2, {
-    theme: 'grid',
-    overflow:'linebreak',
-    styles: {
-        fillColor: [100, 100, 100]
-    },
-    columnStyles: {
-        id: {fillColor: 255}
-    },
-    margin: {top: 100},
-    afterPageContent: function(data) {
-//        doc.text("Header", 40, 30);
-    }
-});
-
 
 //TABLA DE CONTENIDO DE LA VENTA
 doc.autoTable(columns, rows, {
@@ -255,6 +246,42 @@ doc.autoTable(columns, rows, {
     columnStyles: {
         id: {fillColor: 255}
     },
+    //margin: {top: doc.autoTableEndPosY()+15},
+    margin: {top: 230},
+    afterPageContent: function(data) {
+//        doc.text("Header", 40, 30);
+    }
+});
+
+//TOTAL
+doc.autoTable(columns2, rows3, {
+    theme: 'grid',
+    overflow:'linebreak',
+    styles: {
+        fillColor: [100, 100, 100]
+    },
+    columnStyles: {
+        id: {fillColor: 255}
+    },
+    //margin: {top: 230},
+    margin: {top: doc.autoTableEndPosY()+15},
+    afterPageContent: function(data) {
+//        doc.text("Header", 40, 30);
+    }
+});
+
+
+//CLIENTE Y ATENDIDO POR
+doc.autoTable(columns2, rows2,{
+    theme: 'grid',
+    overflow:'linebreak',
+    styles: {
+        fillColor: [100, 100, 100]
+    },
+    columnStyles: {
+        id: {fillColor: 255}
+    },
+    //margin: {top: 230},
     margin: {top: doc.autoTableEndPosY()+15},
     afterPageContent: function(data) {
 //        doc.text("Header", 40, 30);

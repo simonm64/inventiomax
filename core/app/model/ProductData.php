@@ -134,7 +134,8 @@ class ProductData {
                     p.unit,
                     rd.name rd,
                     p.inventary_min,
-                    p.price_out
+                    p.price_out,
+                    p.price_in
                 from
                   ".self::$tablename." p
                 join rd on (
