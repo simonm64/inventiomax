@@ -227,10 +227,15 @@ var doc = new jsPDF('p', 'pt');
         doc.text("RFC OCO 061009 P43", 40, 125);
         doc.text("WWW.RAYOLAMN.COM", 40, 140);
         doc.setFontSize(14);
-        doc.text("<?php echo "Fecha: ".date('d/m/Y'); ?>", 420, 170);
+        doc.text("<?php echo "Fecha: ".date('d/m/Y'); ?>", 445, 170);
+        doc.setFontSize(10);
+        doc.text("CARTA DE SALIDA #:", 365, 190);
+        doc.text("________________", 470, 190);
+        doc.text("CODIGO:", 422, 210);
+        doc.text("________________", 470, 210);
         doc.setFontSize(12);
-        doc.text("Por medio de la presente solicito le entreguen a: <?php echo (isset($person->name))? $person->name." ".$person->lastname : ""; ?>", 40, 190);
-        doc.text("la mercancía a continuación detallada", 40, 205);
+        doc.text("Por medio de la presente solicito le entreguen a: <?php echo (isset($person->name))? $person->name." ".$person->lastname : ""; ?>", 40, 230);
+        doc.text("la mercancía a continuación detallada", 40, 245);
         //doc.text("Fecha: <?php //echo $sell->created_at; ?>", 40, 170);
 //        doc.text("Operador:", 40, 150);
 //        doc.text("Header", 40, 30);
@@ -247,14 +252,14 @@ doc.autoTable(columns, rows, {
         id: {fillColor: 255}
     },
     //margin: {top: doc.autoTableEndPosY()+15},
-    margin: {top: 230},
+    margin: {top: 260},
     afterPageContent: function(data) {
 //        doc.text("Header", 40, 30);
     }
 });
 
 //TOTAL
-doc.autoTable(columns2, rows3, {
+/*doc.autoTable(columns2, rows3, {
     theme: 'grid',
     overflow:'linebreak',
     styles: {
@@ -269,7 +274,7 @@ doc.autoTable(columns2, rows3, {
 //        doc.text("Header", 40, 30);
     }
 });
-
+*/
 
 //CLIENTE Y ATENDIDO POR
 doc.autoTable(columns2, rows2,{

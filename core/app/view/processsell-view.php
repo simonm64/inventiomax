@@ -97,7 +97,10 @@ $_SESSION["errors"] = $errors;
 			$product = ProductData::getById($c["product_id"]);
 			$op = new OperationData();
 			$op->price_in = $product->price_in;
-			$op->price_out = $product->price_out;
+			if(isset($c["pv"]) && $c["pv"]!="")
+				$op->price_out = $c["pv"];
+			else
+				$op->price_out = $product->price_out;
 			$op->product_id = $c["product_id"] ;
 
 			$op->operation_type_id=OperationTypeData::getByName($operation_type)->id;

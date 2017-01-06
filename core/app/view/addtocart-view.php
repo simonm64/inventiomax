@@ -1,6 +1,6 @@
 <?php
 
-if(isset($_POST["q"]) && !is_numeric($_POST["q"])){
+if( (isset($_POST["q"]) && !is_numeric($_POST["q"])) || (isset($_POST["pv"]) && $_POST["pv"]!="" && !is_numeric($_POST["pv"])) ){
 Core::alert("Valor invalido!");
 Core::redir("./?view=sell");
 }
@@ -8,7 +8,8 @@ Core::redir("./?view=sell");
 if(!isset($_SESSION["cart"])){
 
 
-	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"]);
+	#$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"]);
+	$product = array("product_id" =>$_POST["product_id"],"q"=>$_POST["q"], "pv"=>$_POST["pv"]);
 	$_SESSION["cart"] = array($product);
 
 
@@ -104,7 +105,7 @@ if($found==true){
 
 if($found==false){
     $nc = count($cart);
-	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"]);
+	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"], "pv"=>$_POST["pv"]);
 	$cart[$nc] = $product;
 //	print_r($cart);
 	$_SESSION["cart"] = $cart;

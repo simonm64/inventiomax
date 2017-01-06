@@ -24,6 +24,7 @@ if(count($products)>0){
 		<th>Precio unitario</th>
 		<th>En inventario</th>
 		<th>Cantidad</th>
+		
 	</thead>
 	<?php
 $products_in_cero=0;
@@ -42,18 +43,18 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		<td>
 			<?php echo $q; ?>
 		</td>
-		<td style="width:250px;"><form method="post" action="index.php?view=addtocart">
-		<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
-
-<div class="input-group">
-		<input type="" class="form-control" required name="q" placeholder="Cantidad ...">
-      <span class="input-group-btn">
-		<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus-sign"></i> Agregar</button>
-      </span>
-    </div>
-
-
-		</form></td>
+		<td style="width:300px;">
+			<form method="post" action="index.php?view=addtocart">
+			<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
+			<div class="input-group">
+				<input type="" class="form-control" required name="q" placeholder="Cantidad ...">
+				<input type="" class="form-control" name="pv" placeholder="Precio en esta venta (opcional)">
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus-sign"></i> Agregar</button>
+				</span>
+			</div>
+			</form>
+		</td>
 	</tr>
 
 <?php else:$products_in_cero++;

@@ -198,28 +198,39 @@ $total = 0;
     <th style="width:30px;">Lote</th>
 	<th style="width:30px;">Producto</th>
 	<th style="width:30px;">Precio Unitario</th>
+	<th style="width:30px;">Precio U. en esta venta</th>
 	<th style="width:30px;">Precio Total</th>
 	<th ></th>
 </thead>
 <?php foreach($_SESSION["cart"] as $p):
+
 $product = ProductData::getByIdtoSell($p["product_id"]);
 ?>
 <tr >
 	<td><?php echo $product->id; ?></td>
-	<td ><?php echo $p["q"]; ?></td>
+	<td><?php echo $p["q"]; ?></td>
 	<td><?php echo $product->unit; ?></td>
     <td><?php echo $product->rd; ?></td>
-    <td><?php echo $product->lote   ; ?></td>
+    <td><?php echo $product->lote; ?></td>
 	<td><?php echo $product->name; ?></td>
 	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
-	<td><b>$ <?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
+	<td><i><b> <?php echo ( (isset($p["pv"]) && $p["pv"]!="") ? "$ ".$p["pv"] : "--"); ?></b></i></td>
+	<td><b>$ <?php
+		if(isset($p["pv"]) && $p["pv"])
+			$pt = $p["pv"]*$p["q"];
+		else
+			$pt = $product->price_out*$p["q"];
+		#$pt = $product->price_out*$p["q"];
+		$total +=$pt; echo number_format($pt,2,".",",");
+		?>
+	</b></td>
 	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a></td>
 </tr>
 
 <?php endforeach; ?>
 </table>
 </div>
-<form method="post" class="form-horizontal" id="processsell" action="index.php?view=processsell">
+<form method="post" class="form-horizontal" id="flisell" action="index.php?view=processsell">
 <h2>Resumen</h2>
 <div class="row">
 <div class="col-md-3">
